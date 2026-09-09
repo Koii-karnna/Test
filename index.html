@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบเอกสารตรวจรับงานจัดจ้างบริหารอาคาร</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="toolbar no-print">
+  <div class="toolbar-brand">
+    <span class="brand-dot"></span>
+    <span class="brand-text">ระบบตรวจรับงานจัดจ้างบริหารอาคาร</span>
+  </div>
+
+  <div class="toolbar-mode">
+    <span class="mode-label">โหมดการใช้งาน</span>
+    <div class="mode-switch" id="modeSwitch">
+      <button type="button" class="mode-btn active" data-mode="admin">แอดมิน (สร้าง/แก้ไข)</button>
+      <button type="button" class="mode-btn" data-mode="signer">ผู้ลงนาม (ตรวจสอบ/เซ็น)</button>
+    </div>
+  </div>
+
+  <div class="toolbar-actions">
+    <button type="button" class="btn btn-ghost" id="btnNew">เอกสารใหม่</button>
+    <button type="button" class="btn btn-ghost" id="btnOpen">เปิดไฟล์โครงการ</button>
+    <input type="file" id="fileOpenInput" accept="application/json" hidden>
+    <button type="button" class="btn btn-outline" id="btnSave">บันทึกไฟล์โครงการ</button>
+    <button type="button" class="btn btn-primary" id="btnPrint">ส่งออก PDF / พิมพ์</button>
+  </div>
+</header>
+
+<div class="save-indicator no-print" id="saveIndicator" hidden>บันทึกร่างอัตโนมัติแล้ว</div>
+
+<main id="documentSheet" class="sheet">
+
+  <section class="doc-letterhead">
+    <div class="letterhead-logo no-print-hide" id="logoBox">
+      <img id="logoImg" alt="ตราสัญลักษณ์หน่วยงาน" hidden>
+      <label class="logo-placeholder no-print" id="logoPlaceholder">
+        <span>+ อัปโหลดโลโก้หน่วยงาน</span>
+        <input type="file" id="logoInput" accept="image/*" hidden>
+      </label>
+    </div>
+    <div class="letterhead-title">
+      <h1>เอกสารตรวจรับงานจัดจ้างบริหารอาคาร</h1>
+      <p class="letterhead-sub">Building Management Service Acceptance Document</p>
+    </div>
+    <div class="letterhead-docno">
+      <label>เลขที่เอกสาร</label>
+      <input type="text" id="docNo" placeholder="เช่น ตร-2569-001">
+      <label>วันที่ตรวจรับ</label>
+      <input type="date" id="docDate">
+    </div>
+  </section>
+
+  <section class="doc-section" id="section-jobinfo">
+    <h2 class="section-title">1. ข้อมูลงาน / ผู้รับจ้าง</h2>
+    <div class="grid grid-2">
+      <div class="field">
+        <label>ชื่องาน / โครงการ</label>
+        <input type="text" data-field="jobName" placeholder="เช่น งานซ่อมบำรุงระบบปรับอากาศ อาคาร A">
+      </div>
+      <div class="field">
+        <label>เลขที่สัญญา / ใบสั่งจ้าง</label>
+        <input type="text" data-field="contractNo">
+      </div>
+      <div class="field">
+        <label>ชื่อผู้รับจ้าง (บริษัท)</label>
+        <input type="text" data-field="contractorName">
+      </div>
+      <div class="field">
+        <label>ผู้ประสานงานผู้รับจ้าง</label>
+        <input type="text" data-field="contractorContact">
+      </div>
+      <div class="field">
+        <label>สถานที่ / อาคาร</label>
+        <input type="text" data-field="location">
+      </div>
+      <div class="field">
+        <label>หน่วยงาน / ผู้ควบคุมงาน</label>
+        <input type="text" data-field="supervisor">
+      </div>
+      <div class="field">
+        <label>ระยะเวลาสัญญา</label>
+        <input type="text" data-field="contractPeriod" placeholder="เช่น 1 ม.ค. - 31 ธ.ค. 2569">
+      </div>
+      <div class="field">
+        <label>งวดงาน / รอบการตรวจ</label>
+        <input type="text" data-field="periodRound" placeholder="เช่น งวดที่ 3 ประจำเดือนกันยายน 2569">
+      </div>
+      <div class="field field-wide">
+        <label>ขอบเขตงานที่ตรวจรับ</label>
+        <textarea data-field="scope" rows="3" placeholder="สรุปขอบเขตงาน/รายละเอียดงานที่ส่งมอบในงวดนี้"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section" id="section-checklist">
+    <div class="section-title-row">
+      <h2 class="section-title">2. รายการตรวจสอบ</h2>
+      <button type="button" class="btn btn-outline btn-sm no-print" id="btnAddRow">+ เพิ่มรายการ</button>
+    </div>
+    <table class="checklist-table" id="checklistTable">
+      <thead>
+        <tr>
+          <th class="col-no">ลำดับ</th>
+          <th class="col-item">รายการตรวจสอบ</th>
+          <th class="col-result">ผลตรวจ</th>
+          <th class="col-remark">หมายเหตุ</th>
+          <th class="col-del no-print"></th>
+        </tr>
+      </thead>
+      <tbody id="checklistBody"></tbody>
+    </table>
+  </section>
+
+  <section class="doc-section" id="section-photos">
+    <h2 class="section-title">3. รูปถ่ายประกอบ</h2>
+    <div class="grid grid-2 photo-groups">
+      <div class="photo-group">
+        <div class="section-title-row">
+          <h3 class="subsection-title">ก่อนดำเนินการ</h3>
+          <label class="btn btn-outline btn-sm no-print">
+            + เพิ่มรูป
+            <input type="file" class="photoInput" data-group="before" accept="image/*" multiple hidden>
+          </label>
+        </div>
+        <div class="photo-grid" id="photosBefore"></div>
+      </div>
+      <div class="photo-group">
+        <div class="section-title-row">
+          <h3 class="subsection-title">หลังดำเนินการ</h3>
+          <label class="btn btn-outline btn-sm no-print">
+            + เพิ่มรูป
+            <input type="file" class="photoInput" data-group="after" accept="image/*" multiple hidden>
+          </label>
+        </div>
+        <div class="photo-grid" id="photosAfter"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="doc-section" id="section-conclusion">
+    <h2 class="section-title">4. สรุปผลการตรวจรับ</h2>
+    <div class="conclusion-options" id="conclusionOptions">
+      <label class="radio-option">
+        <input type="radio" name="conclusion" value="pass"> ผ่านการตรวจรับ
+      </label>
+      <label class="radio-option">
+        <input type="radio" name="conclusion" value="conditional"> ผ่านแบบมีเงื่อนไข / ต้องแก้ไขเพิ่มเติม
+      </label>
+      <label class="radio-option">
+        <input type="radio" name="conclusion" value="fail"> ไม่ผ่านการตรวจรับ
+      </label>
+    </div>
+    <div class="field field-wide">
+      <label>ข้อเสนอแนะ / เงื่อนไขเพิ่มเติม</label>
+      <textarea id="conclusionNote" rows="3"></textarea>
+    </div>
+  </section>
+
+  <section class="doc-section" id="section-signatures">
+    <h2 class="section-title">5. การลงนาม</h2>
+    <div class="signature-row" id="signatureRow"></div>
+  </section>
+
+  <section class="doc-section" id="section-attachments">
+    <div class="section-title-row">
+      <h2 class="section-title">6. ไฟล์แนบ / หลักฐานอื่น ๆ</h2>
+      <label class="btn btn-outline btn-sm no-print">
+        + แนบไฟล์
+        <input type="file" id="attachmentInput" multiple hidden>
+      </label>
+    </div>
+    <ul class="attachment-list" id="attachmentList"></ul>
+  </section>
+
+</main>
+
+<footer class="app-footer no-print">
+  <span>เอกสารนี้จัดเก็บในเครื่องของคุณเท่านั้น (ไม่มีการส่งข้อมูลออกอินเทอร์เน็ต)</span>
+</footer>
+
+<script src="js/state.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

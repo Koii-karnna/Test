@@ -1,0 +1,615 @@
+:root {
+  --navy: #0a2540;
+  --navy-dark: #071a30;
+  --navy-soft: #eef2f7;
+  --gold: #c9a24b;
+  --gold-soft: #f7efdc;
+  --ink: #1c2733;
+  --ink-muted: #5b6b7c;
+  --line: #d8dee6;
+  --bg: #f4f6f9;
+  --white: #ffffff;
+  --danger: #b3382c;
+  --ok: #1f7a3f;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(10, 37, 64, 0.08), 0 1px 2px rgba(10, 37, 64, 0.06);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Leelawadee UI", "Tahoma", "TH Sarabun New", "Segoe UI", sans-serif;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* ---------- Toolbar ---------- */
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: var(--navy);
+  color: var(--white);
+  padding: 10px 20px;
+  box-shadow: var(--shadow);
+}
+
+.toolbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: inline-block;
+}
+
+.toolbar-mode {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 8px;
+}
+
+.mode-label {
+  font-size: 12.5px;
+  color: #c7d3e0;
+}
+
+.mode-switch {
+  display: flex;
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+.mode-btn {
+  border: none;
+  background: transparent;
+  color: #d7e0ea;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.mode-btn.active {
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-weight: 700;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border-radius: 6px;
+  border: 1px solid transparent;
+  padding: 8px 14px;
+  font-size: 13.5px;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-weight: 700;
+}
+.btn-primary:hover { background: #d7b264; }
+
+.btn-outline {
+  background: transparent;
+  border-color: rgba(255,255,255,0.35);
+  color: var(--white);
+}
+.btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: #d7e0ea;
+}
+.btn-ghost:hover { color: var(--white); text-decoration: underline; }
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 12.5px;
+}
+
+/* within the sheet, outline buttons should read on white */
+.sheet .btn-outline {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+.sheet .btn-outline:hover { background: var(--navy-soft); }
+
+.save-indicator {
+  position: fixed;
+  right: 20px;
+  bottom: 16px;
+  background: var(--navy);
+  color: var(--gold-soft);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  box-shadow: var(--shadow);
+  z-index: 30;
+  opacity: 0.92;
+}
+
+/* ---------- Sheet / document ---------- */
+
+.sheet {
+  max-width: 900px;
+  margin: 24px auto 60px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 40px 40px;
+  border-top: 6px solid var(--gold);
+}
+
+.doc-letterhead {
+  display: grid;
+  grid-template-columns: 96px 1fr 220px;
+  gap: 18px;
+  align-items: center;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--navy);
+  margin-bottom: 22px;
+}
+
+.letterhead-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy-soft);
+  border: 1px dashed var(--line);
+}
+
+.letterhead-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-placeholder {
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-align: center;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.letterhead-title h1 {
+  margin: 0;
+  font-size: 21px;
+  color: var(--navy);
+}
+
+.letterhead-sub {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--ink-muted);
+  letter-spacing: .3px;
+}
+
+.letterhead-docno {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12.5px;
+}
+
+.letterhead-docno label {
+  color: var(--ink-muted);
+  margin-top: 4px;
+}
+
+.letterhead-docno input {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.doc-section {
+  margin-bottom: 28px;
+}
+
+.section-title {
+  font-size: 15.5px;
+  color: var(--navy);
+  border-left: 4px solid var(--gold);
+  padding-left: 10px;
+  margin: 0 0 14px;
+}
+
+.subsection-title {
+  font-size: 13.5px;
+  color: var(--navy);
+  margin: 0;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.section-title-row .section-title { margin-bottom: 0; }
+
+.grid {
+  display: grid;
+  gap: 14px 20px;
+}
+
+.grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field-wide { grid-column: 1 / -1; }
+
+.field label {
+  font-size: 12.5px;
+  color: var(--ink-muted);
+}
+
+input[type="text"], input[type="date"], textarea, select {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--white);
+  width: 100%;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(10,37,64,0.08);
+}
+
+textarea { resize: vertical; }
+
+/* ---------- Checklist table ---------- */
+
+.checklist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.checklist-table th {
+  background: var(--navy-soft);
+  color: var(--navy);
+  text-align: left;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+}
+
+.checklist-table td {
+  border: 1px solid var(--line);
+  padding: 6px 8px;
+  vertical-align: top;
+}
+
+.checklist-table .col-no { width: 46px; text-align: center; }
+.checklist-table .col-result { width: 150px; }
+.checklist-table .col-del { width: 36px; }
+
+.checklist-table textarea {
+  border: none;
+  padding: 4px;
+  min-height: 30px;
+}
+
+.checklist-table input[type="text"] {
+  border: none;
+  padding: 4px;
+}
+
+.row-index {
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: 13px;
+  padding-top: 10px !important;
+}
+
+.result-select {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 6px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.result-select[data-value="pass"] { color: var(--ok); }
+.result-select[data-value="fail"] { color: var(--danger); }
+
+.row-delete-btn {
+  border: none;
+  background: transparent;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 4px;
+}
+
+/* ---------- Photos ---------- */
+
+.photo-groups { align-items: start; }
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.photo-card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--navy-soft);
+}
+
+.photo-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-card input[type="text"] {
+  border: none;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  font-size: 11px;
+  padding: 4px 6px;
+}
+
+.photo-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(10,37,64,0.75);
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.photo-empty {
+  font-size: 12.5px;
+  color: var(--ink-muted);
+  padding: 10px 0;
+}
+
+/* ---------- Conclusion ---------- */
+
+.conclusion-options {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.radio-option input { accent-color: var(--navy); }
+
+/* ---------- Signatures ---------- */
+
+.signature-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.signature-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+  background: #fbfcfd;
+}
+
+.signature-card.locked { background: #f5f6f8; }
+
+.signature-role {
+  font-size: 12.5px;
+  color: var(--ink-muted);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.signature-box {
+  height: 84px;
+  border: 1px dashed var(--line);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.signature-box img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.signature-box-empty {
+  font-size: 11.5px;
+  color: #97a3b0;
+}
+
+.signature-card input[type="text"] {
+  font-size: 12.5px;
+  padding: 5px 7px;
+  margin-bottom: 6px;
+}
+
+.signature-line {
+  border-top: 1px solid var(--ink);
+  margin-top: 6px;
+  padding-top: 4px;
+  font-size: 12px;
+}
+
+.signature-disabled-note {
+  font-size: 11px;
+  color: #97a3b0;
+  margin-top: 4px;
+}
+
+/* ---------- Attachments ---------- */
+
+.attachment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.attachment-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachment-size {
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+
+.attachment-remove-btn {
+  border: none;
+  background: transparent;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.attachment-empty {
+  font-size: 12.5px;
+  color: var(--ink-muted);
+}
+
+/* ---------- Footer ---------- */
+
+.app-footer {
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  padding-bottom: 30px;
+}
+
+/* ---------- Locked (signer mode) state for editable fields ---------- */
+
+.locked-field {
+  background: #f5f6f8 !important;
+  color: var(--ink-muted);
+  pointer-events: none;
+}
+
+/* ---------- Print ---------- */
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+
+  body { background: var(--white); font-size: 12px; }
+
+  .no-print { display: none !important; }
+
+  .sheet {
+    box-shadow: none;
+    border-top: none;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+  }
+
+  .doc-section { break-inside: avoid; margin-bottom: 16px; }
+  .checklist-table { break-inside: auto; }
+  .checklist-table tr { break-inside: avoid; }
+  .signature-row { break-inside: avoid; }
+
+  input, textarea, select {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 2px 0 !important;
+  }
+
+  .checklist-table td, .checklist-table th {
+    border: 1px solid #666 !important;
+  }
+
+  .signature-card { border: 1px solid #999; }
+  .photo-card { border: 1px solid #999; break-inside: avoid; }
+
+  .letterhead-logo { border: none; background: transparent; }
+}
